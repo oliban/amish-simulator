@@ -34,6 +34,7 @@ namespace AmishSimulator.Editor
             player.AddComponent<PlayerController>();
             player.AddComponent<AgingSystem>();
             player.AddComponent<BeardSystem>();
+            player.AddComponent<InteractionSystem>();
             var pc = player.AddComponent<ProceduralCharacter>();
             pc.gender = Gender.Male;
             player.transform.position = new Vector3(0, 0, 0);
@@ -56,17 +57,38 @@ namespace AmishSimulator.Editor
             barnGo.transform.position = new Vector3(8, 0, 0);
             barnGo.AddComponent<ProceduralBarn>();
 
-            // Butter churn prop
+            // Butter churn prop + gameplay + interaction
             var churnGo = new GameObject("ButterChurn");
             churnGo.transform.SetParent(env.transform);
             churnGo.transform.position = new Vector3(-3, 0, 2);
             churnGo.AddComponent<ProceduralButterChurn>();
+            churnGo.AddComponent<ButterChurning>();
+            churnGo.AddComponent<ChurnStation>();
 
-            // Plow prop
+            // Plow prop + gameplay + interaction
             var plowGo = new GameObject("Plow");
             plowGo.transform.SetParent(env.transform);
             plowGo.transform.position = new Vector3(3, 0, -3);
             plowGo.AddComponent<ProceduralPlow>();
+            plowGo.AddComponent<Plowing>();
+            plowGo.AddComponent<PlowPoint>();
+
+            // Sleep point near the barn entrance
+            var sleepGo = new GameObject("SleepPoint");
+            sleepGo.transform.SetParent(env.transform);
+            sleepGo.transform.position = new Vector3(4, 0, 0);
+            sleepGo.AddComponent<SleepPoint>();
+
+            // NPCs — neighbour family patrolling the field
+            for (int i = 0; i < 2; i++)
+            {
+                var npcGo = new GameObject($"NPC_Neighbor{i}");
+                npcGo.transform.SetParent(env.transform);
+                npcGo.transform.position = new Vector3(-6 + i * 4, 0, 6);
+                var npcChar = npcGo.AddComponent<ProceduralCharacter>();
+                npcChar.gender = (i % 2 == 0) ? Gender.Male : Gender.Female;
+                npcGo.AddComponent<NPCPatrol>();
+            }
 
             // ── Camera setup ───────────────────────────────────────────────
             var cam = Camera.main;
@@ -76,6 +98,7 @@ namespace AmishSimulator.Editor
                 cam.transform.rotation = Quaternion.Euler(30, 0, 0);
                 cam.backgroundColor = new Color(0.53f, 0.74f, 0.90f); // sky blue
                 cam.gameObject.AddComponent<CameraFollow>();
+                cam.gameObject.AddComponent<DayNightController>();
             }
 
             // ── Directional light ──────────────────────────────────────────

@@ -1,0 +1,5 @@
+﻿<Solution>
+  <Project Path="AmishSimulator.csproj" />
+  <Project Path="AmishSimulator.EditMode.Tests.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+</Solution>

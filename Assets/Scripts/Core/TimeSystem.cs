@@ -94,6 +94,13 @@ namespace AmishSimulator
             AdvanceHour();
         }
 
+        public void AdvanceToNextDay()
+        {
+            int hoursLeft = HoursPerDay - CurrentHour;
+            for (int i = 0; i < hoursLeft; i++)
+                AdvanceHour();
+        }
+
         private void AdvanceDay()
         {
             CurrentDay++;
